@@ -61,7 +61,7 @@ public class ModuleBar {
 这里实际上实现了ModuleStub的接口方法，要求方法与之签名一致。只是没有使用implements关键字。		
 ​			
 使用方：					
-在工程build.gradle中配置依赖:					
+在工程build.gradle中配置依赖(目前还没有打包到远程maven库):					
 
 ```java					
   compile 'com.meiyou.framework:summer:0.0.8-SNAPSHOT'
