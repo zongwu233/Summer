@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+<TextView
+    android:id="@+id/text_test_shadow"
+    android:layout_width="fill_parent"
+    android:layout_gravity="center_horizontal"
+    android:text="test"
+    android:textSize="26dp"
+
+    android:gravity="center_horizontal"
+    android:layout_height="40dp" />
+    <TextView
+        android:id="@+id/test_test_event_bus"
+        android:layout_width="fill_parent"
+        android:layout_gravity="center_horizontal"
+        android:text="test-Event"
+        android:textSize="26dp"
+
+        android:gravity="center_horizontal"
+        android:layout_height="40dp" />
+</LinearLayout>
