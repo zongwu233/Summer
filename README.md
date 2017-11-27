@@ -178,7 +178,7 @@ testEvent 的class里面有：
 
 
 
-## [License Apache-2.0](LICENSE)
+## [License MIT](LICENSE)
 ​		
 
 
