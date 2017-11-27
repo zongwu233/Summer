@@ -1,52 +1,57 @@
-#### 模块间协议组件
-业务模块间通常通过定义/实现java的interface完成业务逻辑，必然导致模块间存在代码层面的依赖。也导致编译期的工程依赖。事实上，业务模块间仅仅是逻辑上存在依赖，完全没必要产生实际的工程依赖。							
+# Summer
+
+## 介绍
+Summer是一个模块解耦框架，它解决了以下几个痛点：
+
+1、模块与模块之间不再需要相互依赖
+
+2、模块边界清晰化
+
+<!--
+业务模块间通常通过定义/实现java的interface完成业务逻辑，必然导致模块间存在代码层面的依赖。也导致编译期的工程依赖。事实上，业务模块间仅仅是逻辑上存在依赖，完全没必要产生实际的工程依赖。			
 该组件提供了一种解藕模块间显式依赖的能力。				
-同时还提供了一个副作用：只要方法签名一致，就可以视为实现了该接口。（这是某些编程语言实现接口的方式）			
-##### interface 的使用方式
-比如模块A定义接口：						
-​				
-```java								
-public interface ModuleStub {
+同时还提供了一个副作用：只要方法签名一致，就可以视为实现了该接口。（这是某些编程语言实现接口的方式）	
+-->		
+##	使用
+###	模块A
 
-    public void testMethod(String msg, Context context, TextView textView);
-}
-```
-模块B实现接口：					
-​	
+-	在build.gradle加入
+
 ```java
-public class ModuleBar implements ModuleStub {
- 
-    @Override
-    public void testMethod(String msg, Context context,
-                                        TextView textView) {
-        Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
-        this.callAntherModule(context, textView);
-    }
-}
+	compile 'com.meiyou:summer:1.0.4'
+	compile 'com.meiyou:summer-compiler:1.0.4'
+
 ```
 
-最终使用方将会：				
+-	定义接口：
 
-```java					
-ModuleStub stub＝new ModuleBar();
-```
-这种方式必然导致模块B依赖模块A。
-
-##### 组件的使用方式
-模块A：				
-
-```java				
+				
+```java	
 @ProtocolShadow("ModuleBarStub")
 public interface ModuleStub {
-	 
-	 public void testMethod(String msg, Context context, TextView textView);
-}
+    public void testMethod(String msg, Context context, TextView textView);
+    }
+
 ```
-这里使用ProtocolShadow注解interface ModuleStub。			
-ProtocolShadow的value是	"ModuleBarStub"。(value值可以自己定制，全局唯一即可)					
-模块B：			
-​		
-```java				
+其中：
+
+ProtocolShadow 是summer接口标识，意味着在编译时会被扫描到并做相应的处理
+
+ModuleBarStub 则是协商的名字，模块B将使用这个字符串标识与之联系
+
+###	模块B					
+
+-	在build.gradle加入
+
+```java
+	compile 'com.meiyou:summer:1.0.4'
+	compile 'com.meiyou:summer-compiler:1.0.4'
+
+```
+
+-	定义实现：
+
+```java
 @Protocol("ModuleBarStub")
 public class ModuleBar {
     
@@ -57,30 +62,28 @@ public class ModuleBar {
     }
 }
 ```
-使用了Protocol注解，value也是"ModuleBarStub"。			
-这里实际上实现了ModuleStub的接口方法，要求方法与之签名一致。只是没有使用implements关键字。		
-​			
-使用方：					
-在工程build.gradle中配置依赖(目前还没有打包到远程maven库):					
+其中：
 
-```java					
-  compile 'com.meiyou.framework:summer:0.0.8-SNAPSHOT'
-```
+Protocol 是summer实现标识，意味着在编译时会被扫描到并做相应的处理
 
-调用的地方：				
+ModuleBarStub 则是与模块A协商的名字
+
+-	模块B调用模块A的方法：
 
 ```java
-  ProtocolInterpreter.getDefault().
+ ProtocolInterpreter.getDefault().
                         create(ModuleStub.class)
                         .testMethod("oh this from main Activity!",
                                 getApplicationContext(), textView);
-                                
+                               
 ```
-使用方只依赖了ModuleStub，ProtocolInterpreter会自动调用合适的类。                         
-##### 其他支持  
-提供Callback接口支持被调用方callback调用方
 
-##### 实现原理
+
+至此，模块A和模块B，在不相互依赖的情况下，完成了交互。
+
+				
+
+## 实现原理
 
 通过编译期注解＋java动态代理实现。				
 具体细节见代码。	
@@ -175,7 +178,7 @@ testEvent 的class里面有：
 
 
 
-
+## [License Apache-2.0](LICENSE)
 ​		
 
 
